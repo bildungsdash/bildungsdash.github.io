@@ -1,0 +1,72 @@
+[
+  {
+    "id": "europa-schweiz",
+    "title": "Europa und die Schweiz",
+    "url": "https://claude.ai/artifact/EdSC9J7gzhVMNYCxsSA9V3",
+    "description": "Lern-Dashboard G24g mit Karte, Karteikarten, Quiz und Prüfungssimulation.",
+    "createdAt": "2026-10-19T22:40:00.000Z"
+  },
+  {
+    "id": "pfadiheim-smart",
+    "title": "Konzept smartes Pfadiheim Lindegar",
+    "url": "https://claude.ai/artifact/Ni7cNPLeLFM4MedAQFCEpX",
+    "description": "Konzept für Technik und Infrastruktur im Pfadiheim.",
+    "createdAt": "2026-10-18T12:00:00.000Z"
+  },
+  {
+    "id": "imperialismus",
+    "title": "Lerndossier Imperialismus und Wettlauf um Afrika",
+    "url": "https://claude.ai/artifact/U5Y4rwzX2Fm5HhtF4ZBZ4h",
+    "description": "Lerndossier Geschichte zum Imperialismus.",
+    "createdAt": "2026-10-16T12:00:00.000Z"
+  },
+  {
+    "id": "kirchentonarten",
+    "title": "Kirchentonarten – Theoriedossier",
+    "url": "https://claude.ai/artifact/9bLjT9b5KXKpFgQ2ENKNVh",
+    "description": "Theorie für die Musikprüfung.",
+    "createdAt": "2026-10-15T12:00:00.000Z"
+  },
+  {
+    "id": "tagescockpit-ios",
+    "title": "Tagescockpit im iOS-Stil",
+    "url": "https://claude.ai/artifact/T3Ns1oKvZiwE47SpPU4fqY",
+    "description": "Variante des Cockpits im iOS-Look.",
+    "createdAt": "2026-10-14T12:00:00.000Z"
+  },
+  {
+    "id": "cockpit-mockups",
+    "title": "Tagescockpit Mehrbenutzer – Mockups",
+    "url": "https://claude.ai/artifact/ByAWb1QqCUcef6zbSWA51U",
+    "description": "Mockups für die Mehrbenutzer-Version.",
+    "createdAt": "2026-10-12T13:00:00.000Z"
+  },
+  {
+    "id": "cockpit-konzept",
+    "title": "Tagescockpit – Konzept Mehrbenutzer",
+    "url": "https://claude.ai/artifact/27P18seGKTE7utTzVVTbX5",
+    "description": "Konzept für mehrere Benutzer.",
+    "createdAt": "2026-10-12T12:00:00.000Z"
+  },
+  {
+    "id": "tagescockpit",
+    "title": "Noels Tagescockpit",
+    "url": "https://claude.ai/artifact/5WdnyE6LTCE3MkMGH1AVUh",
+    "description": "Persönliches Tagesboard.",
+    "createdAt": "2026-10-11T12:00:00.000Z"
+  },
+  {
+    "id": "basiskurs",
+    "title": "Kursrückmeldung Basiskurs",
+    "url": "https://claude.ai/artifact/HxYi2veY3Hx4BFt1yc1XzP",
+    "description": "Rückmeldung zum Basiskurs der Pfadibewegung Schweiz.",
+    "createdAt": "2026-10-10T12:00:00.000Z"
+  },
+  {
+    "id": "elternabend-kasse",
+    "title": "Elternabend-Kasse",
+    "url": "https://claude.ai/artifact/C6mWXGfyGmjtKBiXcM6kFP",
+    "description": "Einfaches Kassensystem für den Elternabend.",
+    "createdAt": "2026-10-01T12:00:00.000Z"
+  }
+]

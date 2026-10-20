@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Dashboards</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=Source+Code+Pro:wght@400;500&display=swap">
+<style>
+/* Layout: Verwaltungs-Startseite – blaues Band oben, weisser Kopf, Kachelraster, Formular als Seitenleiste */
+:root{
+  --bg:#FFFFFF; --band:#00618A; --band-ink:#FFFFFF; --accent:#009FE3; --ink:#1B2A33; --muted:#5B6B75;
+  --line:#D5DEE3; --soft:#EEF4F7; --hover:#E2EEF4; --danger:#B42318; --danger-soft:#FBE9E7; --ok:#1F7A4A; --ok-soft:#E4F3EA;
+  --link:#00618A;
+  --f-sans:"Source Sans 3","Frutiger","Segoe UI",Helvetica,Arial,sans-serif;
+  --f-mono:"Source Code Pro",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1A21; --band:#003F5C; --band-ink:#E6F2F8; --accent:#3DB8EE; --ink:#E3ECF1; --muted:#97A8B2;
+  --line:#25363F; --soft:#14242D; --hover:#1B303B; --danger:#F07C6C; --danger-soft:#3A1E1A; --ok:#5CC98E; --ok-soft:#163222;
+  --link:#6CC6F0; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1A21; --band:#003F5C; --band-ink:#E6F2F8; --accent:#3DB8EE; --ink:#E3ECF1; --muted:#97A8B2;
+  --line:#25363F; --soft:#14242D; --hover:#1B303B; --danger:#F07C6C; --danger-soft:#3A1E1A; --ok:#5CC98E; --ok-soft:#163222;
+  --link:#6CC6F0; color-scheme:dark}
+*{box-sizing:border-box}
+html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-sans);font-size:16px;line-height:1.5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--band)}
+button,input,select,textarea{font:inherit;color:inherit}
+[hidden]{display:none!important}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.in{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+.band{background:var(--band);color:var(--band-ink);font-size:13px}
+.band .in{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-block:7px}
+.band b{font-weight:600;letter-spacing:.02em}
+.head{border-bottom:1px solid var(--line)}
+.head .in{display:flex;align-items:flex-end;justify-content:space-between;gap:16px 28px;flex-wrap:wrap;padding-block:26px 22px}
+.mark{display:flex;align-items:center;gap:14px}
+.sq{width:44px;height:44px;flex:0 0 auto;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:4px}
+.sq i{display:block;background:var(--band)}
+.sq i:nth-child(2){background:var(--accent)}
+.sq i:nth-child(3){background:var(--line)}
+h1{font-size:clamp(26px,3.6vw,34px);line-height:1.1;margin:0;font-weight:700;text-wrap:balance}
+.sub{color:var(--muted);margin:2px 0 0;font-size:15px}
+.tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.search{position:relative}
+.search input{width:min(280px,72vw);border:1px solid var(--line);background:var(--bg);padding:9px 12px 9px 34px;border-radius:2px}
+.search input:focus{border-color:var(--band);outline:none;box-shadow:0 0 0 2px var(--hover)}
+.search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:var(--muted);fill:none;stroke-width:2}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--band);background:var(--band);color:#fff;padding:9px 16px;border-radius:2px;font-weight:600;cursor:pointer;font-size:15px;text-decoration:none}
+.btn:hover{filter:brightness(1.1)}
+.btn.sec{background:transparent;color:var(--link);border-color:var(--line)}
+.btn.sec:hover{background:var(--soft)}
+.btn.del{background:var(--danger);border-color:var(--danger);color:#fff}
+.btn:disabled{opacity:.5;cursor:default}
+
+main .in{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:36px;padding-block:28px 56px;align-items:start}
+.sections{display:grid;gap:34px;min-width:0}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:2px solid var(--band);padding-bottom:6px;margin-bottom:14px}
+.sec-h h2{margin:0;font-size:21px;font-weight:700;color:var(--link)}
+.sec-h span{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));gap:12px}
+.card{position:relative;display:grid;grid-template-rows:auto 1fr auto;gap:6px;border:1px solid var(--line);border-left:4px solid var(--accent);background:var(--bg);padding:14px 14px 12px;min-width:0;transition:background .12s}
+.card:hover{background:var(--soft)}
+.card a.t{color:var(--ink);font-weight:700;font-size:17px;line-height:1.25;text-decoration:none}
+.card a.t::after{content:"";position:absolute;inset:0}
+.card a.t:hover{color:var(--link);text-decoration:underline;text-underline-offset:3px}
+.card p{margin:0;color:var(--muted);font-size:14.5px;line-height:1.45}
+.card .meta{display:flex;align-items:center;justify-content:space-between;gap:8px;font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.card .meta .dom{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.card .acts{position:relative;z-index:1;display:flex;gap:2px;opacity:0;transition:opacity .12s}
+.card:hover .acts,.card:focus-within .acts{opacity:1}
+@media (hover:none){.card .acts{opacity:1}}
+.icon{background:none;border:0;padding:5px;cursor:pointer;color:var(--muted);border-radius:2px;display:inline-grid;place-items:center}
+.icon:hover{background:var(--hover);color:var(--link)}
+.icon.x:hover{background:var(--danger-soft);color:var(--danger)}
+.icon svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2}
+.confirm{position:relative;z-index:1;display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:var(--danger-soft);padding:8px 10px;font-size:14px;margin:4px -4px 0}
+.confirm .btn{padding:5px 12px;font-size:14px}
+
+aside{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px);display:grid;gap:16px}
+.box{border:1px solid var(--line);background:var(--bg)}
+.box h3{margin:0;padding:11px 16px;background:var(--band);color:#fff;font-size:16px;font-weight:600}
+.box .body{padding:16px;display:grid;gap:12px}
+label{display:grid;gap:4px;font-weight:600;font-size:14px}
+label .hint{font-weight:400;color:var(--muted);font-size:13px}
+input[type=text],input[type=url],textarea{width:100%;border:1px solid var(--line);background:var(--bg);padding:8px 10px;border-radius:2px}
+input:focus,textarea:focus{border-color:var(--band);outline:none;box-shadow:0 0 0 2px var(--hover)}
+textarea{resize:vertical;min-height:60px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.err{color:var(--danger);font-size:14px;margin:0}
+.facts{font-size:14px;color:var(--muted);display:grid;gap:4px}
+.facts b{color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* Ausgabe für GitHub */
+.out{border:1px solid var(--line);border-top:4px solid var(--ok);background:var(--ok-soft);padding:16px;display:grid;gap:10px}
+.out h3{margin:0;font-size:17px}
+.out ol{margin:0;padding-left:20px;display:grid;gap:4px;font-size:14.5px}
+.out code{font-family:var(--f-mono);font-size:13px}
+.out pre{margin:0;max-height:220px;overflow:auto;background:var(--bg);border:1px solid var(--line);padding:10px;font-family:var(--f-mono);font-size:12px;line-height:1.45;white-space:pre}
+.out .copied{color:var(--ok);font-size:14px;font-weight:600}
+
+.empty{border:1px dashed var(--line);padding:28px;display:grid;gap:8px;justify-items:start;background:var(--soft)}
+.empty h2{margin:0;font-size:20px;color:var(--link)}
+.empty p{margin:0;color:var(--muted);max-width:60ch}
+.empty code{font-family:var(--f-mono);font-size:14px}
+.skel{height:92px;background:linear-gradient(90deg,var(--soft),var(--hover),var(--soft));background-size:200% 100%;animation:sh 1.4s infinite linear}
+@keyframes sh{to{background-position:-200% 0}}
+@media (prefers-reduced-motion:reduce){.skel{animation:none}.card,.card .acts{transition:none}}
+
+footer{border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+footer .in{padding-block:16px}
+footer a{color:var(--link)}
+
+@media (max-width:900px){
+  main .in{grid-template-columns:1fr;gap:28px}
+  aside{position:static;order:-1}
+  aside.closed{display:none}
+}
+</style>
+</head>
+<body>
+<div class="band"><div class="in"><b>Startseite</b><span>Persönliche Übersicht · Luzern</span></div></div>
+
+<header class="head"><div class="in">
+  <div class="mark">
+    <div class="sq" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <div><h1>Dashboards</h1><p class="sub">Alle Dashboards an einem Ort.</p></div>
+  </div>
+  <div class="tools">
+    <div class="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+      <input type="search" id="q" placeholder="Suchen …" aria-label="Dashboards durchsuchen"></div>
+    <button class="btn" type="button" id="addBtn">+ Link hinzufügen</button>
+  </div>
+</div></header>
+
+<main><div class="in">
+  <div class="sections" id="sections">
+    <div class="grid"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>
+  </div>
+  <aside id="aside" class="closed">
+    <div class="out" id="out" hidden></div>
+    <div class="box" id="formbox" hidden>
+      <h3 id="formTitle">Neuer Link</h3>
+      <form class="body" id="form" novalidate>
+        <label for="fTitle">Titel<input type="text" id="fTitle" maxlength="90" placeholder="z. B. Lerndossier Französisch" required></label>
+        <label for="fUrl">Adresse<span class="hint">Ein claude.ai-Artefakt oder jede andere https-Seite</span><input type="url" id="fUrl" placeholder="https://claude.ai/artifact/…" required></label>
+        <label for="fDesc">Beschreibung<span class="hint">Optional, ein Satz</span><textarea id="fDesc" maxlength="200" rows="2"></textarea></label>
+        <p class="err" id="fErr" hidden></p>
+        <div class="row"><button class="btn" type="submit" id="fSave">Neue links.json erstellen</button><button class="btn sec" type="button" id="fCancel">Abbrechen</button></div>
+      </form>
+    </div>
+    <div class="box">
+      <h3>Übersicht</h3>
+      <div class="body facts" id="facts"><span>Wird geladen …</span></div>
+    </div>
+  </aside>
+</div></main>
+
+<footer><div class="in">Die Links stehen in <code>links.json</code>. Änderungen werden auf GitHub gespeichert und sind nach rund einer Minute online. Links öffnen in einem neuen Tab.</div></footer>
+
+<script>
+/* ---------------------------------------------------------------
+   Einstellungen. Auf GitHub Pages werden Besitzer und Repo
+   automatisch erkannt. Sonst hier eintragen, z. B.
+   owner:"noel", repo:"dashboards".
+   --------------------------------------------------------------- */
+const CONFIG = { owner:"", repo:"", branch:"main", file:"links.json" };
+
+(function detect(){
+  const h=location.hostname;
+  if(!CONFIG.owner && h.endsWith(".github.io")){
+    CONFIG.owner=h.split(".")[0];
+    const seg=location.pathname.split("/").filter(Boolean)[0];
+    CONFIG.repo = CONFIG.repo || (seg && !seg.includes(".") ? seg : h);
+  }
+})();
+const editUrl = () => CONFIG.owner&&CONFIG.repo ? `https://github.com/${CONFIG.owner}/${CONFIG.repo}/edit/${CONFIG.branch}/${CONFIG.file}` : null;
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+let links=[], loaded=false, failed=false, query="", editId=null, confirmId=null;
+
+const ICON_EDIT='<svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m14 6 4 4"/></svg>';
+const ICON_DEL='<svg viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>';
+
+function domain(u){try{const x=new URL(u);return x.hostname.replace(/^www\./,"")+(x.hostname.endsWith("claude.ai")?" · Artefakt":"");}catch(e){return u;}}
+function fmtDate(t){if(!t)return"";const d=new Date(t);return isNaN(d)?"":d.toLocaleDateString("de-CH",{day:"numeric",month:"short",year:"numeric"});}
+function slug(t){const b=t.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,40)||"link";let id=b,i=2;while(links.some(l=>l.id===id&&l.id!==editId))id=b+"-"+i++;return id;}
+function matches(l){if(!query)return true;const q=query.toLowerCase();return [l.title,l.description,l.url].some(v=>String(v||"").toLowerCase().includes(q));}
+
+function render(){renderSections();renderFacts();}
+function renderSections(){
+  const el=$("#sections");
+  if(!loaded) return;
+  if(failed){el.innerHTML=`<div class="empty"><h2>links.json nicht gefunden</h2><p>Die Seite konnte <code>links.json</code> nicht laden. Lege die Datei im selben Ordner wie <code>index.html</code> ab. Wenn du die Seite direkt vom Computer öffnest, starte einen lokalen Server (siehe README), denn Browser blockieren das Laden von Dateien über <code>file://</code>.</p></div>`;return;}
+  if(!links.length){el.innerHTML=`<div class="empty"><h2>Noch keine Dashboards</h2><p>Hier erscheinen deine Dashboards, die neusten zuerst. Füge mit «Link hinzufügen» den ersten Eintrag hinzu.</p><button class="btn" type="button" id="emptyAdd">+ Ersten Link hinzufügen</button></div>`;
+    $("#emptyAdd").onclick=()=>openForm(); return;}
+  const items=links.filter(matches).sort((a,b)=>(b.createdAt||"").localeCompare(a.createdAt||""));
+  el.innerHTML=items.length?`<section><div class="sec-h"><h2>${query?"Suchresultate":"Alle Dashboards"}</h2><span>${items.length} ${items.length===1?"Eintrag":"Einträge"} · neuste zuerst</span></div><div class="grid">${items.map(card).join("")}</div></section>`
+    :`<div class="empty"><h2>Keine Treffer</h2><p>Für «${esc(query)}» gibt es keinen Link. Prüfe die Schreibweise.</p></div>`;
+  el.querySelectorAll("[data-edit]").forEach(b=>b.onclick=e=>{e.preventDefault();openForm(b.dataset.edit);});
+  el.querySelectorAll("[data-del]").forEach(b=>b.onclick=e=>{e.preventDefault();confirmId=b.dataset.del;renderSections();const k=el.querySelector(".confirm .btn.sec");k&&k.focus();});
+  el.querySelectorAll("[data-no]").forEach(b=>b.onclick=()=>{confirmId=null;renderSections();});
+  el.querySelectorAll("[data-yes]").forEach(b=>b.onclick=()=>{const l=links.find(x=>x.id===b.dataset.yes);confirmId=null;renderSections();
+    showOutput(links.filter(x=>x.id!==l.id),`«${l.title}» entfernen`);});
+}
+function card(l){
+  const safe=/^https:\/\//i.test(l.url||"")?l.url:"#";
+  return `<article class="card">
+    <a class="t" href="${esc(safe)}" target="_blank" rel="noopener">${esc(l.title)}</a>
+    <p>${esc(l.description||"")}</p>
+    ${confirmId===l.id?`<div class="confirm"><span>«${esc(l.title)}» entfernen?</span><button class="btn del" type="button" data-yes="${esc(l.id)}">Entfernen</button><button class="btn sec" type="button" data-no>Behalten</button></div>`:
+    `<div class="meta"><span class="dom">${esc(domain(l.url))}</span><span class="acts"><button class="icon" type="button" data-edit="${esc(l.id)}" aria-label="${esc(l.title)} bearbeiten" title="Bearbeiten">${ICON_EDIT}</button><button class="icon x" type="button" data-del="${esc(l.id)}" aria-label="${esc(l.title)} entfernen" title="Entfernen">${ICON_DEL}</button></span></div>`}
+  </article>`;
+}
+function renderFacts(){
+  if(!loaded) return;
+  const latest=links.slice().sort((a,b)=>(b.createdAt||"").localeCompare(a.createdAt||""))[0];
+  const eu=editUrl();
+  $("#facts").innerHTML=`<span><b>${links.length}</b> ${links.length===1?"Link":"Links"} in links.json</span>
+    ${latest?`<span>Zuletzt hinzugefügt: <b>${esc(latest.title)}</b>${latest.createdAt?" am "+esc(fmtDate(latest.createdAt)):""}</span>`:""}
+    ${eu?`<a class="btn sec" href="${esc(eu)}" target="_blank" rel="noopener">links.json auf GitHub bearbeiten</a>`:`<span>Repo nicht erkannt. Trage <code>owner</code> und <code>repo</code> oben im Script ein, dann erscheint hier der Link zum Bearbeiten.</span>`}`;
+}
+
+/* Formular → neue links.json */
+function openForm(id){
+  editId=id||null; const l=links.find(x=>x.id===id);
+  $("#formTitle").textContent=l?"Link bearbeiten":"Neuer Link";
+  $("#fTitle").value=l?l.title:""; $("#fUrl").value=l?l.url:""; $("#fDesc").value=l?(l.description||""):"";
+  $("#fErr").hidden=true; $("#out").hidden=true;
+  $("#aside").classList.remove("closed"); $("#formbox").hidden=false;
+  $("#formbox").scrollIntoView({block:"nearest",behavior:"smooth"}); $("#fTitle").focus({preventScroll:true});
+}
+function closeForm(){editId=null;$("#formbox").hidden=true;$("#form").reset();$("#fErr").hidden=true;if($("#out").hidden)$("#aside").classList.add("closed");}
+$("#fCancel").onclick=closeForm;
+$("#addBtn").onclick=()=>openForm();
+function showErr(t){$("#fErr").textContent=t;$("#fErr").hidden=false;}
+$("#form").addEventListener("submit",e=>{
+  e.preventDefault();
+  const title=$("#fTitle").value.trim(); let url=$("#fUrl").value.trim(); const description=$("#fDesc").value.trim();
+  if(!title) return showErr("Gib dem Link einen Titel.");
+  if(url&&!/^[a-z]+:\/\//i.test(url)) url="https://"+url;
+  try{const u=new URL(url); if(u.protocol!=="https:") throw 0;}catch(_){return showErr("Die Adresse muss mit https:// beginnen, z. B. https://claude.ai/artifact/…");}
+  const now=new Date().toISOString(); let next, label;
+  if(editId){const old=links.find(x=>x.id===editId)||{};next=links.map(x=>x.id===editId?{id:old.id,title,url,description,createdAt:old.createdAt||now}:x);label=`«${title}» bearbeiten`;}
+  else{next=[...links,{id:slug(title),title,url,description,createdAt:now}];label=`«${title}» hinzufügen`;}
+  closeForm(); showOutput(next,label);
+});
+function showOutput(next,label){
+  const json=JSON.stringify(next.slice().sort((a,b)=>(b.createdAt||"").localeCompare(a.createdAt||"")),null,2)+"\n";
+  const eu=editUrl(); const out=$("#out");
+  out.innerHTML=`<h3>Noch nicht gespeichert: ${esc(label)}</h3>
+   <ol><li>Neue <code>links.json</code> kopieren.</li>
+   <li>${eu?"Auf GitHub öffnen":"Auf GitHub <code>links.json</code> öffnen und auf den Stift klicken"}.</li>
+   <li>Alles markieren und ersetzen (Strg/Cmd + A, dann einfügen).</li>
+   <li>«Commit changes» klicken. Nach rund einer Minute ist die Seite aktuell.</li></ol>
+   <div class="row"><button class="btn" type="button" id="cp">links.json kopieren</button>${eu?`<a class="btn sec" href="${esc(eu)}" target="_blank" rel="noopener">Auf GitHub öffnen</a>`:""}<button class="btn sec" type="button" id="outClose">Schliessen</button></div>
+   <span class="copied" id="cpMsg" hidden>Kopiert.</span>
+   <pre id="json" tabindex="0">${esc(json)}</pre>`;
+  out.hidden=false; $("#aside").classList.remove("closed");
+  out.scrollIntoView({block:"nearest",behavior:"smooth"});
+  $("#cp").onclick=async()=>{
+    try{await navigator.clipboard.writeText(json);$("#cpMsg").textContent="Kopiert.";}
+    catch(e){const r=document.createRange();r.selectNodeContents($("#json"));const s=getSelection();s.removeAllRanges();s.addRange(r);$("#cpMsg").textContent="Text ist markiert. Kopiere ihn mit Strg/Cmd + C.";}
+    $("#cpMsg").hidden=false;};
+  $("#outClose").onclick=()=>{out.hidden=true;if($("#formbox").hidden)$("#aside").classList.add("closed");};
+}
+$("#q").addEventListener("input",e=>{query=e.target.value.trim();renderSections();});
+
+/* links.json laden (ohne Cache, damit neue Commits sofort sichtbar sind) */
+fetch(CONFIG.file+"?v="+Date.now(),{cache:"no-store"})
+  .then(r=>{if(!r.ok)throw new Error(r.status);return r.json();})
+  .then(data=>{links=(Array.isArray(data)?data:[]).filter(l=>l&&l.title&&l.url).map((l,i)=>({...l,id:l.id||("link-"+i)}));loaded=true;render();})
+  .catch(()=>{failed=true;loaded=true;render();});
+</script>
+</body>
+</html>
