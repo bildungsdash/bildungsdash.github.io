@@ -1,17 +1,9 @@
 [
   {
-    "id": "europa-und-die-schweiz-pb",
-    "title": "Europa und die Schweiz PB",
+    "id": "pb-europa-schweiz-und-neutralitat",
+    "title": "PB: Europa Schweiz und Neutralität",
     "url": "https://bildungsdash.github.io/europa.html",
-    "description": "",
-    "createdAt": "2026-10-20T09:31:23.890Z"
-  },
-  {
-    "id": "tagescockpit",
-    "title": "Tagescockpit",
-    "url": "https://cockpit.cristofaro-lu.ch",
-    "description": "",
-    "createdAt": "2026-10-20T09:33:05.890Z"
-  },
- 
+    "description": "Für die Prüfung Okt. 2026",
+    "createdAt": "2026-10-20T09:36:44.219Z"
+  }
 ]
